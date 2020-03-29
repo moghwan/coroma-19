@@ -1,74 +1,92 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-        <v-col cols="6">
-          <v-alert
-                  border="left"
-                  outlined
-                  type="info"
-                  elevation="2"
-          >
-            {{ info_regions }}.
-          </v-alert>
-          <v-data-table
-                  :headers="regionsHeader"
-                  :items="regions"
-                  :itemsPerPage=20
-                  class="elevation-1">
-          </v-data-table>
-        </v-col>
-        <v-col cols="6">
-          <v-alert
-                  border="left"
-                  outlined
-                  type="info"
-                  elevation="2"
-          >
-            {{ info_timeSeries }}.
-          </v-alert>
-          <v-data-table
-                  :headers="timesSeriesHeader"
-                  :items="timesSeries"
-                  :itemsPerPage=20
-                  class="elevation-1">
-          </v-data-table>
-        </v-col>
-        <v-col cols="12">
-          <v-alert
-                  border="left"
-                  outlined
-                  type="info"
-                  elevation="2"
-          >
-            {{ info_cities }}.
-          </v-alert>
-          <v-data-table
-                  :headers="citiesHeader"
-                  :items="cities"
-                  :itemsPerPage=20
-                  class="elevation-1">
-          </v-data-table>
-        </v-col>
-</v-row>
+    <v-container>
+        <v-row class="text-center">
+            <v-col cols="12" lg="3" sm="6">
+              <v-card class="mx-auto">
+                  <v-card-text class="headline font-weight-bold">
+                      <p>Confirmed</p>
+                      <p class="blue--text">{{ this.counts['Cases/الحالات'] }}</p>
+                  </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+              <v-card class="mx-auto">
+                  <v-card-text class="headline font-weight-bold">
+                      <p>Active Cases</p>
+                      <p class="orange--text">{{ this.counts['active'] }}</p>
+                  </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+              <v-card class="mx-auto">
+                  <v-card-text class="headline font-weight-bold">
+                      <p>Deaths</p>
+                      <p class="red--text">{{ this.counts['Deaths/الوفيات'] }}</p>
+                  </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+                <v-card class="mx-auto">
+                    <v-card-text class="headline font-weight-bold">
+                        <p>Recovered</p>
+                        <p class="light-green--text">{{ this.counts['Recovered/تعافى'] }}</p>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <highcharts :options="data"></highcharts>
+            </v-col>
+        </v-row>
+        <v-row class="text-center">
+            <v-col cols="12" lg="6" sm="12" xs="12"><v-alert
+                        border="left"
+                        outlined
+                        type="info"
+                        elevation="2"
+                >
+                    التسلسل الزمني لبيانات فيروس كورونا
+                </v-alert>
+                <v-data-table
+                        :headers="timesSeriesHeader"
+                        :items="timesSeries"
+                        :itemsPerPage=20
+                        :sortDesc=true
+                        sortBy="Dates/التواريخ"
+                        class="elevation-1">
+                </v-data-table>
+            </v-col>
+            <v-col cols="12" lg="6" sm="12" xs="12">
+              <v-alert
+                      border="left"
+                      outlined
+                      type="info"
+                      elevation="2"
+              >
+                  بيانات فيروس كورونا في المغرب حسب الجهة
+              </v-alert>
+              <v-data-table
+                      :headers="regionsHeader"
+                      :items="regions"
+                      :itemsPerPage=20
+                      :sortDesc=true
+                      sortBy="TotalCases/إجماليالحالات"
+                      class="elevation-1">
+              </v-data-table>
+          </v-col>
+      </v-row>
   </v-container>
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
-
+import {Chart} from 'highcharts-vue'
+export default {
     data: () => ({
-      info_cities: 'COVID-19 Data in Morocco by city / بيانات فيروس كورونا في المغرب حسب المدينة',
-      info_timeSeries: 'Time series of COVID-19 data in Morocco / التسلسل الزمني لبيانات فيروس',
-      info_regions: 'COVID-19 Data n Morocco by region / بيانات فيروس كورونا في المغرب حسب الجهة',
-      cities: [],
-      citiesHeader: [
-        { text: 'City/المدينة:', value: 'City/المدينة', },
-        { text: 'Region/المنطقة', value: 'Region/المنطقة' },
-        { text: 'ActiveCases/الحالاتالنشطة', value: 'ActiveCases/الحالاتالنشطة' },
-        { text: 'TotalDeaths/إجماليالوفيات', value: 'TotalDeaths/إجماليالوفيات' },
-        { text: 'TotalRecovered/إجماليالمعافين', value: 'TotalRecovered/إجماليالمعافين' },
-      ],
+      highcharts: Chart,
+      data: [],
+      counts: [],
+      timesSeriesChart: [],
       timesSeries: [],
       timesSeriesHeader: [
         { text: 'Dates/التواريخ:', value: 'Dates/التواريخ', },
@@ -78,26 +96,20 @@
       ],
       regions: [],
       regionsHeader: [
-        {
-          text: 'Region/الجهة',
-          align: 'start',
-          sortable: false,
-          value: 'Region/الجهة',
-        },
-        { text: 'TotalCases/إجماليالحالات', value: 'TotalCases/إجماليالحالات' },
-        { text: 'ActiveCases/الحالاتالنشطة', value: 'ActiveCases/الحالاتالنشطة' },
-        { text: 'TotalDeaths/إجماليالوفيات', value: 'TotalDeaths/إجماليالوفيات' },
-        { text: 'TotalRecovered/إجماليالمعافين', value: 'TotalRecovered/إجماليالمعافين' },
+        { text: 'Region/الجهة', value: 'Region/الجهة', },
+        { text: 'TotalCases/إجمالي الحالات', value: 'TotalCases/إجماليالحالات' },
+        { text: 'ActiveCases/الحالات النشطة', value: 'ActiveCases/الحالاتالنشطة' },
+        { text: 'TotalDeaths/إجمالي الوفيات', value: 'TotalDeaths/إجماليالوفيات' },
+        { text: 'TotalRecovered/إجمالي المعافين', value: 'TotalRecovered/إجماليالمعافين' },
       ],
     }),
 
     mounted() {
+        this.fetchCsv('ts', 'https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/MA-times_series.csv');
+        this.fetchCsv('r', 'https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/regions.csv');
     },
 
     created() {
-      this.fetchCsv('c','https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/cities.csv');
-      this.fetchCsv('ts', 'https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/MA-times_series.csv');
-      this.fetchCsv('r', 'https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/regions.csv');
     },
     methods: {
       fetchCsv(val, url){
@@ -106,7 +118,6 @@
             let lines = csvRegions.split(/\r?\n/);
             let fieldDelimiter = ',';
             let headers = lines[0].split(fieldDelimiter);
-console.log(headers);
             let jsonResult = [];
             for (let i = 1; i < lines.length; i++) {
               let currentLine = lines[i].split(fieldDelimiter);
@@ -120,13 +131,18 @@ console.log(headers);
             }
 
             switch (val) {
-              case 'c':
-                this.cities = jsonResult;
-                console.log(jsonResult);
-                break;
               case 'ts':
                 this.timesSeries = jsonResult;
-                break;
+                this.counts = jsonResult[jsonResult.length - 1];
+                this.counts['active'] = this.counts['Cases/الحالات'] - this.counts['Recovered/تعافى'] - this.counts['Deaths/الوفيات'];
+                this.data =  {
+                  series: [{
+                      data: jsonResult.map(function (e) {
+                          return parseInt(e['Cases/الحالات']);
+                      })
+                  }]
+              };
+                  break;
               case 'r':
                 this.regions = jsonResult;
                 break;
