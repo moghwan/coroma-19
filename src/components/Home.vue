@@ -1,35 +1,100 @@
 <template>
     <v-container>
+        <v-app-bar
+                color="white"
+                app
+                flat="true"
+                hide-on-scroll
+        >
+            <v-spacer></v-spacer>
+
+            <v-toolbar-title>CORO<span class="ma">MA</span>-19</v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+        </v-app-bar>
         <v-row class="text-center">
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
-                  <v-card-text class="headline font-weight-bold">
-                      <p>Confirmed</p>
-                      <p class="blue--text">{{ this.counts['Cases/الحالات'] }}</p>
+                  <v-card-text class="headline font-weight-bold blue-grey darken-1">
+                      <p class="grey--text text--lighten-5">Confirmed</p>
+                      <v-progress-circular
+                              indeterminate
+                              color="white"
+                              v-if="!this.last['Cases/الحالات']"
+                      ></v-progress-circular>
+                      <p class="grey--text text--lighten-5" v-else>
+                          <v-badge
+                                  :content="this.diff['Cases/الحالات']"
+                                  :value="this.diff['Cases/الحالات']"
+                                  color="blue darken-1"
+                          >
+                              {{ this.last['Cases/الحالات'] }}
+                          </v-badge>
+                      </p>
                   </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
-                  <v-card-text class="headline font-weight-bold">
-                      <p>Active Cases</p>
-                      <p class="orange--text">{{ this.counts['active'] }}</p>
+                  <v-card-text class="headline font-weight-bold yellow darken-3">
+                      <p class="grey--text text--lighten-5">Active Cases</p>
+                      <v-progress-circular
+                              indeterminate
+                              color="white"
+                              v-if="!this.last['active']"
+                      ></v-progress-circular>
+                      <p class="grey--text text--lighten-5" v-else>
+                          <v-badge
+                                  :content="this.diff['active']"
+                                  :value="this.diff['active']"
+                                  color="blue darken-1"
+                          >
+                              {{ this.last['active'] }}
+                          </v-badge>
+                      </p>
                   </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
-                  <v-card-text class="headline font-weight-bold">
-                      <p>Deaths</p>
-                      <p class="red--text">{{ this.counts['Deaths/الوفيات'] }}</p>
+                  <v-card-text class="headline font-weight-bold red lighten-1">
+                      <p class="grey--text text--lighten-5">Deaths</p>
+                      <v-progress-circular
+                              indeterminate
+                              color="white"
+                              v-if="!this.last['Deaths/الوفيات']"
+                      ></v-progress-circular>
+                      <p class="grey--text text--lighten-5" v-else>
+                          <v-badge
+                                  :content="this.diff['Deaths/الوفيات']"
+                                  :value="this.diff['Deaths/الوفيات']"
+                                  color="blue darken-1"
+                          >
+                          {{ this.last['Deaths/الوفيات'] }}
+                          </v-badge>
+                      </p>
                   </v-card-text>
               </v-card>
             </v-col>
             <v-col cols="12" lg="3" sm="6">
-                <v-card class="mx-auto">
-                    <v-card-text class="headline font-weight-bold">
-                        <p>Recovered</p>
-                        <p class="light-green--text">{{ this.counts['Recovered/تعافى'] }}</p>
+                <v-card class="mx-auto" color="80c783">
+                    <v-card-text class="headline font-weight-bold green lighten-2">
+                        <p class="grey--text text--lighten-5">Recovered</p>
+                        <v-progress-circular
+                                indeterminate
+                                color="white"
+                                v-if="!this.last['Recovered/تعافى']"
+                        ></v-progress-circular>
+                        <p class="grey--text text--lighten-5" v-else>
+                            <v-badge
+                                    :content="this.diff['Recovered/تعافى']"
+                                    :value="this.diff['Recovered/تعافى']"
+                                    color="blue darken-1"
+                            >
+                                {{ this.last['Recovered/تعافى'] }}
+                            </v-badge>
+                        </p>
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -53,7 +118,7 @@
                         :items="timesSeries"
                         :itemsPerPage=20
                         :sortDesc=true
-                        sortBy="Dates/التواريخ"
+                        sortBy="Cases/الحالات"
                         class="elevation-1">
                 </v-data-table>
             </v-col>
@@ -79,13 +144,25 @@
   </v-container>
 </template>
 
+<style scoped lang="scss">
+
+    $body-font-family: "C" !important;
+    .main {
+        background-color: #62b7fa;
+    }
+    .ma {
+        color: #ee534f ;
+    }
+</style>
+
 <script>
 import {Chart} from 'highcharts-vue'
 export default {
     data: () => ({
       highcharts: Chart,
       data: [],
-      counts: [],
+      last: [],
+      diff: [],
       timesSeriesChart: [],
       timesSeries: [],
       timesSeriesHeader: [
@@ -110,6 +187,7 @@ export default {
     },
 
     created() {
+        // this.$vuetify.theme.dark = true
     },
     methods: {
       fetchCsv(val, url){
@@ -133,8 +211,15 @@ export default {
             switch (val) {
               case 'ts':
                 this.timesSeries = jsonResult;
-                this.counts = jsonResult[jsonResult.length - 1];
-                this.counts['active'] = this.counts['Cases/الحالات'] - this.counts['Recovered/تعافى'] - this.counts['Deaths/الوفيات'];
+                this.last = jsonResult[jsonResult.length - 1];
+                this.last['active'] = this.last['Cases/الحالات'] - this.last['Recovered/تعافى'] - this.last['Deaths/الوفيات'];
+                var beforeLast = jsonResult[jsonResult.length - 2];
+                beforeLast['active'] = beforeLast['Cases/الحالات'] - beforeLast['Recovered/تعافى'] - beforeLast['Deaths/الوفيات'];
+                this.diff['active'] = this.last['active'] - beforeLast['active'];
+                this.diff['Cases/الحالات'] = this.last['Cases/الحالات'] - beforeLast['Cases/الحالات'];
+                this.diff['Recovered/تعافى'] = this.last['Recovered/تعافى'] - beforeLast['Recovered/تعافى'];
+                this.diff['Deaths/الوفيات'] = this.last['Deaths/الوفيات'] - beforeLast['Deaths/الوفيات'];
+                console.log(this.diff);
                 this.data =  {
                   series: [{
                       data: jsonResult.map(function (e) {

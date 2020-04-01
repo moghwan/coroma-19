@@ -1,6 +1,6 @@
 {
-  "name": "covid19-ma-praph",
-  "version": "0.1.0",
+  "name": "coroma-19",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
