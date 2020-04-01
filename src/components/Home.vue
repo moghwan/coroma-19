@@ -3,21 +3,26 @@
         <v-app-bar
                 color="white"
                 app
-                flat="true"
+                flat
                 hide-on-scroll
         >
             <v-spacer></v-spacer>
-
-            <v-toolbar-title>CORO<span class="ma">MA</span>-19</v-toolbar-title>
-
+            <v-toolbar-title>CORO<span class="ma">🇲🇦</span>-19</v-toolbar-title>
             <v-spacer></v-spacer>
-
         </v-app-bar>
+
+        <v-row>
+            <v-col cols="12">
+                <highcharts :options="data"></highcharts>
+            </v-col>
+        </v-row>
         <v-row class="text-center">
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
                   <v-card-text class="headline font-weight-bold blue-grey darken-1">
-                      <p class="grey--text text--lighten-5">Confirmed</p>
+                      <p class="grey--text text--lighten-5">
+                          الحالات المؤكدة
+                      </p>
                       <v-progress-circular
                               indeterminate
                               color="white"
@@ -38,7 +43,9 @@
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
                   <v-card-text class="headline font-weight-bold yellow darken-3">
-                      <p class="grey--text text--lighten-5">Active Cases</p>
+                      <p class="grey--text text--lighten-5">
+                          الحالات النشطة
+                      </p>
                       <v-progress-circular
                               indeterminate
                               color="white"
@@ -59,7 +66,9 @@
             <v-col cols="12" lg="3" sm="6">
               <v-card class="mx-auto">
                   <v-card-text class="headline font-weight-bold red lighten-1">
-                      <p class="grey--text text--lighten-5">Deaths</p>
+                      <p class="grey--text text--lighten-5">
+                          الوفيات
+                      </p>
                       <v-progress-circular
                               indeterminate
                               color="white"
@@ -80,7 +89,9 @@
             <v-col cols="12" lg="3" sm="6">
                 <v-card class="mx-auto" color="80c783">
                     <v-card-text class="headline font-weight-bold green lighten-2">
-                        <p class="grey--text text--lighten-5">Recovered</p>
+                        <p class="grey--text text--lighten-5">
+                            المتعافون
+                        </p>
                         <v-progress-circular
                                 indeterminate
                                 color="white"
@@ -99,19 +110,15 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col cols="12">
-                <highcharts :options="data"></highcharts>
-            </v-col>
-        </v-row>
         <v-row class="text-center">
             <v-col cols="12" lg="6" sm="12" xs="12"><v-alert
+                        color="blue-grey"
                         border="left"
                         outlined
                         type="info"
                         elevation="2"
                 >
-                    التسلسل الزمني لبيانات فيروس كورونا
+                التسلسل الزمني لبيانات فيروس كورونا
                 </v-alert>
                 <v-data-table
                         :headers="timesSeriesHeader"
@@ -124,6 +131,7 @@
             </v-col>
             <v-col cols="12" lg="6" sm="12" xs="12">
               <v-alert
+                      color="blue-grey"
                       border="left"
                       outlined
                       type="info"
@@ -166,18 +174,18 @@ export default {
       timesSeriesChart: [],
       timesSeries: [],
       timesSeriesHeader: [
-        { text: 'Dates/التواريخ:', value: 'Dates/التواريخ', },
-        { text: 'Cases/الحالات', value: 'Cases/الحالات' },
-        { text: 'Recovered/تعافى', value: 'Recovered/تعافى' },
-        { text: 'Deaths/الوفيات', value: 'Deaths/الوفيات' },
+        { text: 'التواريخ:', value: 'Dates/التواريخ', },
+        { text: 'الحالات', value: 'Cases/الحالات' },
+        { text: 'تعافى', value: 'Recovered/تعافى' },
+        { text: 'الوفيات', value: 'Deaths/الوفيات' },
       ],
       regions: [],
       regionsHeader: [
-        { text: 'Region/الجهة', value: 'Region/الجهة', },
-        { text: 'TotalCases/إجمالي الحالات', value: 'TotalCases/إجماليالحالات' },
-        { text: 'ActiveCases/الحالات النشطة', value: 'ActiveCases/الحالاتالنشطة' },
-        { text: 'TotalDeaths/إجمالي الوفيات', value: 'TotalDeaths/إجماليالوفيات' },
-        { text: 'TotalRecovered/إجمالي المعافين', value: 'TotalRecovered/إجماليالمعافين' },
+        { text: 'الجهة', value: 'Region/الجهة', },
+        { text: 'إجمالي الحالات', value: 'TotalCases/إجماليالحالات' },
+        { text: 'الحالات النشطة', value: 'ActiveCases/الحالاتالنشطة' },
+        { text: 'إجمالي الوفيات', value: 'TotalDeaths/إجماليالوفيات' },
+        { text: 'إجمالي المعافين', value: 'TotalRecovered/إجماليالمعافين' },
       ],
     }),
 
@@ -190,6 +198,10 @@ export default {
         // this.$vuetify.theme.dark = true
     },
     methods: {
+        reformatDate(date){
+            const splited = date.split('/')
+            return splited[2] + '-' + splited[1] + '-' + splited[0]
+        },
       fetchCsv(val, url){
         fetch(url).then((response) => {
           response.text().then((csvRegions) => {
@@ -219,13 +231,58 @@ export default {
                 this.diff['Cases/الحالات'] = this.last['Cases/الحالات'] - beforeLast['Cases/الحالات'];
                 this.diff['Recovered/تعافى'] = this.last['Recovered/تعافى'] - beforeLast['Recovered/تعافى'];
                 this.diff['Deaths/الوفيات'] = this.last['Deaths/الوفيات'] - beforeLast['Deaths/الوفيات'];
-                console.log(this.diff);
+
+                var vm = this;
+                var arrCases = [];
+                var arrDeaths = [];
+                var arrRecovers = [];
+                jsonResult.map(function (e) {
+                    arrCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Cases/الحالات'])]);
+                    arrDeaths.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Deaths/الوفيات'])]);
+                    arrRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Recovered/تعافى'])]);
+                });
+
                 this.data =  {
-                  series: [{
-                      data: jsonResult.map(function (e) {
-                          return parseInt(e['Cases/الحالات']);
-                      })
-                  }]
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: ' '
+                },
+                xAxis: {
+                    title: {
+                        text: 'عدد الأيام منذ أول حالة'
+                    },
+                },
+                yAxis: {
+                    title: {
+                        text: 'عدد الحالات'
+                    },
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                series: [{
+                        name: 'الحالات المؤكدة',
+                        color: '#546e7a',
+                        data: arrCases
+                    },
+                    {
+                        name: 'الوفيات',
+                        type: 'column',
+                        color: '#EF5350',
+                        data: arrDeaths
+                    },
+                    {
+                        name: 'المتعافون',
+                        color: '#81C784',
+                        data: arrRecovers
+                    }
+                ]
               };
                   break;
               case 'r':
