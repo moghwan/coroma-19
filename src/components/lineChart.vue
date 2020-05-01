@@ -10,7 +10,7 @@
     import {Chart} from 'highcharts-vue'
     export default {
         name: 'lineChart',
-        props: ['arrCases','arrDeaths','arrRecovers'],
+        props: ['arrCases','arrDailyCases','arrDailyActiveCases','arrDeaths','arrRecovers'],
         data: () =>({
             highcharts: Chart,
             opt:  ''
@@ -44,14 +44,24 @@
                             }
                         }
                     },
-                    series: [{
+                    series: [
+                    {
+                        name: 'الحالات اليومية',
+                        color: '#1E88E5',
+                        data: this.arrDailyCases
+                    },
+                    {
+                        name: 'الحالات النشطة اليومية',
+                        type: 'column',
+                        color: '#f9a825',
+                        data: this.arrDailyActiveCases
+                    },{
                         name: 'الحالات المؤكدة',
                         color: '#546e7a',
                         data: this.arrCases
                     },
                     {
                         name: 'الوفيات',
-                        type: 'column',
                         color: '#EF5350',
                         data: this.arrDeaths
                     },
@@ -59,7 +69,18 @@
                         name: 'المتعافون',
                         color: '#81C784',
                         data: this.arrRecovers
-                    }]
+                    },
+                    // {
+                    //     name: 'الوفيات اليومية',
+                    //     color: '#EF5350',
+                    //     data: this.arrDailyDeaths
+                    // },
+                    // {
+                    //     name: 'المتعافون اليوميين',
+                    //     color: '#81C784',
+                    //     data: this.arrDailyRecovers
+                    // },
+                    ]
                 };
             }
         }

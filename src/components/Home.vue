@@ -7,6 +7,11 @@
                 :arrDeaths="arrDeaths"
                 :arrRecovers="arrRecovers"></lineChart>
 
+        <lineChart
+                :arrDailyCases="arrDailyCases"
+                :arrDailyActiveCases="arrDailyActiveCases"
+        ></lineChart>
+
         <cardStates :diff="diff" :last="last"></cardStates>
 
         <regions></regions>
@@ -29,8 +34,12 @@
         },
         data: () => ({
             arrCases: [],
+            arrDailyCases: [],
+            arrDailyActiveCases: [],
             arrDeaths: [],
+            arrDailyDeaths: [],
             arrRecovers: [],
+            arrDailyRecovers: [],
             last: [],
             diff: [],
         }),
@@ -76,13 +85,38 @@
                         this.diff['Recovered/تعافى'] = this.last['Recovered/تعافى'] - beforeLast['Recovered/تعافى'];
                         this.diff['Deaths/الوفيات'] = this.last['Deaths/الوفيات'] - beforeLast['Deaths/الوفيات'];
 
-                        var vm = this;
+                        const vm = this;
 
-                        jsonResult.map(function (e) {
+                        jsonResult.forEach((e,i) =>{
+                            let newCase;
+                            let newDeaths;
+                            let newRecovers;
+                            let newActiveCase;
+                            if (i) {
+                                newCase = e['Cases/الحالات'] - jsonResult[i-1]['Cases/الحالات'];
+                                newDeaths = e['Deaths/الوفيات'] - jsonResult[i-1]['Deaths/الوفيات'];
+                                newRecovers = e['Recovered/تعافى'] - jsonResult[i-1]['Recovered/تعافى'];
+                                newActiveCase =
+                                    (e['Cases/الحالات'] - e['Deaths/الوفيات'] - e['Recovered/تعافى'])
+                                        -
+                                    (jsonResult[i-1]['Cases/الحالات'] - jsonResult[i-1]['Deaths/الوفيات'] - jsonResult[i-1]['Recovered/تعافى'])
+                                ;
+                            } else {
+                                newActiveCase = newCase = 1;
+                            }
+
+                            vm.arrDailyCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newCase)]);
+                            vm.arrDailyDeaths.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newDeaths)]);
+                            vm.arrDailyRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newRecovers)]);
+                            vm.arrDailyActiveCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newActiveCase)]);
                             vm.arrCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Cases/الحالات'])]);
                             vm.arrDeaths.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Deaths/الوفيات'])]);
                             vm.arrRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Recovered/تعافى'])]);
                         });
+
+                        console.log(vm.arrDailyCases);
+                        console.log(vm.arrCases);
+
                     });
                 });
             }
