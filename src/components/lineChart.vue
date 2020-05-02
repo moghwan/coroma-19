@@ -22,25 +22,40 @@
             getvals(){
                 this.opt = {
                     chart: {
-                        type: 'spline'
+                        type: 'spline',
+                        backgroundColor: (this.$vuetify.theme.dark) && '#121212',
                     },
                     title: {
                         text: ' '
                     },
+                    legend: {
+                        itemStyle: {
+                            color: (this.$vuetify.theme.dark) && '#ededed',
+                        }
+                    },
                     xAxis: {
                         title: {
-                            text: 'عدد الأيام منذ أول حالة'
+                            text: 'عدد الأيام منذ أول حالة',
+                            style: {
+                                color: (this.$vuetify.theme.dark) && '#ededed',
+                            }
                         },
                     },
                     yAxis: {
                         title: {
-                            text: 'عدد الحالات'
+                            text: 'عدد الحالات',
+                            style: {
+                                color: (this.$vuetify.theme.dark) && '#ededed',
+                            }
                         },
                     },
                     plotOptions: {
                         series: {
                             dataLabels: {
-                                enabled: true
+                                enabled: true,
+                                style: {
+                                    color: (this.$vuetify.theme.dark) && '#ededed',
+                                }
                             },
                             marker: {
                               enabled: false,
@@ -56,6 +71,7 @@
                     {
                         name: 'الحالات النشطة اليومية',
                         type: 'column',
+                        borderColor: 'transparent',
                         color: '#f9a825',
                         data: this.arrDailyActiveCases
                     },

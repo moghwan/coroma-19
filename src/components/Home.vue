@@ -61,9 +61,8 @@
         mounted() {
             this.fetchCsv('https://raw.githubusercontent.com/aboullaite/Covid19-MA/master/stats/MA-times_series.csv');
         },
-
         created() {
-            // this.$vuetify.theme.dark = true
+            this.$vuetify.theme.dark = (localStorage.getItem('isDark') !== 'false');
         },
         methods: {
             reformatDate(date){
