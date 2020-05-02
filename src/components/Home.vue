@@ -13,7 +13,7 @@
                 <cardStates :color="'blue-grey darken-1'" :label="'الحالات المؤكدة'" :diff="diff['Cases/الحالات']" :last="last['Cases/الحالات']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
-                <cardStates :color="'yellow darken-3'" :label="'الحالات النشطة'" :diff="diff['active']" :last="last['active']"></cardStates>
+                <cardStates :color="'yellow darken-3'" :label="'الحالات النشيطة'" :diff="diff['active']" :last="last['active']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
                 <cardStates :color="'red lighten-1'" :label="'الوفيات'" :diff="diff['Deaths/الوفيات']" :last="last['Deaths/الوفيات']"></cardStates>

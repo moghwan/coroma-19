@@ -9,7 +9,6 @@
         <v-toolbar-title>CORO<span class="ma">🇲🇦</span>-19</v-toolbar-title>
         <v-btn icon @click="switchDarkMode">
             <v-icon>mdi-invert-colors</v-icon>
-<!--            <v-icon dark>mdi-magnify</v-icon>-->
         </v-btn>
         <v-spacer></v-spacer>
     </v-app-bar>
