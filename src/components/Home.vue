@@ -4,15 +4,28 @@
 
         <lineChart
                 :arrCases="arrCases"
+                :arrActiveCases="arrActiveCases"
                 :arrDeaths="arrDeaths"
                 :arrRecovers="arrRecovers"></lineChart>
 
+        <v-row class="text-center">
+            <v-col cols="6" lg="3" sm="6">
+                <cardStates :color="'blue-grey darken-1'" :label="'الحالات المؤكدة'" :diff="diff['Cases/الحالات']" :last="last['Cases/الحالات']"></cardStates>
+            </v-col>
+            <v-col cols="6" lg="3" sm="6">
+                <cardStates :color="'yellow darken-3'" :label="'الحالات النشطة'" :diff="diff['active']" :last="last['active']"></cardStates>
+            </v-col>
+            <v-col cols="6" lg="3" sm="6">
+                <cardStates :color="'red lighten-1'" :label="'الوفيات'" :diff="diff['Deaths/الوفيات']" :last="last['Deaths/الوفيات']"></cardStates>
+            </v-col>
+            <v-col cols="6" lg="3" sm="6">
+                <cardStates :color="'green lighten-2'" :label="'المتعافون'" :diff="diff['Recovered/تعافى']" :last="last['Recovered/تعافى']"></cardStates>
+            </v-col>
+        </v-row>
         <lineChart
                 :arrDailyCases="arrDailyCases"
                 :arrDailyActiveCases="arrDailyActiveCases"
         ></lineChart>
-
-        <cardStates :diff="diff" :last="last"></cardStates>
 
         <regions></regions>
 
@@ -33,13 +46,14 @@
             regions,
         },
         data: () => ({
-            arrCases: [],
             arrDailyCases: [],
             arrDailyActiveCases: [],
-            arrDeaths: [],
             arrDailyDeaths: [],
-            arrRecovers: [],
             arrDailyRecovers: [],
+            arrCases: [],
+            arrActiveCases: [],
+            arrDeaths: [],
+            arrRecovers: [],
             last: [],
             diff: [],
         }),
@@ -110,6 +124,7 @@
                             vm.arrDailyRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newRecovers)]);
                             vm.arrDailyActiveCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(newActiveCase)]);
                             vm.arrCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Cases/الحالات'])]);
+                            vm.arrActiveCases.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Cases/الحالات'] - e['Deaths/الوفيات'] - e['Recovered/تعافى'])]);
                             vm.arrDeaths.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Deaths/الوفيات'])]);
                             vm.arrRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Recovered/تعافى'])]);
                         });

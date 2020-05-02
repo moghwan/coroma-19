@@ -10,7 +10,7 @@
     import {Chart} from 'highcharts-vue'
     export default {
         name: 'lineChart',
-        props: ['arrCases','arrDailyCases','arrDailyActiveCases','arrDeaths','arrRecovers'],
+        props: ['arrCases','arrDailyCases','arrDailyActiveCases','arrDeaths','arrRecovers','arrActiveCases'],
         data: () =>({
             highcharts: Chart,
             opt:  ''
@@ -41,7 +41,10 @@
                         series: {
                             dataLabels: {
                                 enabled: true
-                            }
+                            },
+                            marker: {
+                              enabled: false,
+                            },
                         }
                     },
                     series: [
@@ -55,10 +58,16 @@
                         type: 'column',
                         color: '#f9a825',
                         data: this.arrDailyActiveCases
-                    },{
+                    },
+                    {
                         name: 'الحالات المؤكدة',
                         color: '#546e7a',
                         data: this.arrCases
+                    },
+                    {
+                        name: 'الحالات النشطة',
+                        color: '#f9a825',
+                        data: this.arrActiveCases
                     },
                     {
                         name: 'الوفيات',
