@@ -48,6 +48,9 @@
                                 color: (this.$vuetify.theme.dark) && '#ededed',
                             }
                         },
+                        stackLabels: {
+                            enabled: true,
+                        }
                     },
                     plotOptions: {
                         series: {
@@ -78,6 +81,7 @@
                     {
                         name: 'الحالات المؤكدة',
                         color: '#546e7a',
+                        visible: false,
                         data: this.arrCases
                     },
                     {
