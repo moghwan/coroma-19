@@ -17,6 +17,9 @@
                 >
                     {{ this.last }}
                 </v-badge>
+                <br>
+                <small v-if="this.percentage">({{percentage}}%)</small>
+                <small v-else>(100%)</small>
             </p>
         </v-card-text>
     </v-card>
@@ -25,6 +28,6 @@
 <script>
     export default {
         name: 'cardStates',
-        props: ['last', 'diff', 'color', 'label'],
+        props: ['last', 'diff', 'color', 'label', 'percentage'],
     }
 </script>

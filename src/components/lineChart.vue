@@ -10,7 +10,19 @@
     import {Chart} from 'highcharts-vue'
     export default {
         name: 'lineChart',
-        props: ['arrCases','arrDailyCases','arrDailyActiveCases','arrDeaths','arrRecovers','arrActiveCases'],
+        props: [
+            'arrCases','arrDailyCases','arrDailyActiveCases','arrDeaths','arrRecovers','arrActiveCases','arrDailyRecovers','arrDailyDeaths',
+            'showDataLabels',
+            'showXyTitles',
+            'showLegendDailyCases',
+            'showLegendDailyActiveCases',
+            'showLegendDailyRecovers',
+            'showLegendDailyDeaths',
+            'showLegendCases',
+            'showLegendActiveCases',
+            'showLegendRecovers',
+            'showLegendDeaths',
+        ],
         data: () =>({
             highcharts: Chart,
             opt:  ''
@@ -22,7 +34,7 @@
             getvals(){
                 this.opt = {
                     chart: {
-                        type: 'spline',
+                        type: 'area',
                         backgroundColor: (this.$vuetify.theme.dark) && '#121212',
                     },
                     title: {
@@ -35,7 +47,7 @@
                     },
                     xAxis: {
                         title: {
-                            text: 'عدد الأيام منذ أول حالة',
+                            text: (this.showXyTitles) && 'عدد الأيام منذ أول حالة',
                             style: {
                                 color: (this.$vuetify.theme.dark) && '#ededed',
                             }
@@ -43,72 +55,88 @@
                     },
                     yAxis: {
                         title: {
-                            text: 'عدد الحالات',
+                            text: (this.showXyTitles) && 'عدد الحالات',
                             style: {
                                 color: (this.$vuetify.theme.dark) && '#ededed',
                             }
                         },
-                        stackLabels: {
-                            enabled: true,
-                        }
+                    },
+                    tooltip: {
+                        shared: true,
+                        useHTML:true,
+                        headerFormat: '<small>{point.key}</small><table>',
+                        pointFormat: "<tr>" +
+                            "<td style='color: {series.color};text-align: right'><b>{point.y:,.0f}</b></td>" +
+                            "<td style='text-align: right'>: {series.name}</td></tr>",
+                        footerFormat: '</table>',
                     },
                     plotOptions: {
                         series: {
                             dataLabels: {
-                                enabled: true,
+                                enabled: (!!this.showDataLabels),
                                 style: {
                                     color: (this.$vuetify.theme.dark) && '#ededed',
                                 }
                             },
                             marker: {
-                              enabled: false,
+                                enabled: false,
                             },
                         }
                     },
                     series: [
                     {
                         name: 'الحالات اليومية',
+                        borderColor: 'transparent',
                         color: '#1E88E5',
-                        data: this.arrDailyCases
+                        data: this.arrDailyCases,
+                        showInLegend: (!!this.showLegendDailyCases)
                     },
                     {
                         name: 'الحالات النشطة اليومية',
-                        type: 'column',
                         borderColor: 'transparent',
                         color: '#f9a825',
-                        data: this.arrDailyActiveCases
+                        data: this.arrDailyActiveCases,
+                        showInLegend: (!!this.showLegendDailyActiveCases)
                     },
                     {
                         name: 'الحالات المؤكدة',
                         color: '#546e7a',
-                        visible: false,
-                        data: this.arrCases
-                    },
-                    {
-                        name: 'الحالات النشطة',
-                        color: '#f9a825',
-                        data: this.arrActiveCases
-                    },
-                    {
-                        name: 'الوفيات',
-                        color: '#EF5350',
-                        data: this.arrDeaths
+                        //visible: false,
+                        data: this.arrCases,
+                        showInLegend: (!!this.showLegendCases)
                     },
                     {
                         name: 'المتعافون',
                         color: '#81C784',
-                        data: this.arrRecovers
+                        data: this.arrRecovers,
+                        showInLegend: (!!this.showLegendRecovers)
                     },
-                    // {
-                    //     name: 'الوفيات اليومية',
-                    //     color: '#EF5350',
-                    //     data: this.arrDailyDeaths
-                    // },
-                    // {
-                    //     name: 'المتعافون اليوميين',
-                    //     color: '#81C784',
-                    //     data: this.arrDailyRecovers
-                    // },
+                    {
+                        name: 'الحالات النشطة',
+                        color: '#f9a825',
+                        data: this.arrActiveCases,
+                        showInLegend: (!!this.showLegendActiveCases)
+                    },
+                    {
+                        name: 'الوفيات',
+                        color: '#EF5350',
+                        data: this.arrDeaths,
+                        showInLegend: (!!this.showLegendDeaths)
+                    },
+                    {
+                        name: 'الوفيات اليومية',
+                        borderColor: 'transparent',
+                        color: '#EF5350',
+                        data: this.arrDailyDeaths,
+                        showInLegend: (!!this.showLegendDailyDeaths)
+                    },
+                    {
+                        name: 'المتعافون اليوميين',
+                        borderColor: 'transparent',
+                        color: '#81C784',
+                        data: this.arrDailyRecovers,
+                        showInLegend: (!!this.showLegendDailyRecovers)
+                    },
                     ]
                 };
             }

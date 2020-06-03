@@ -3,29 +3,58 @@
         <appBar></appBar>
 
         <lineChart
+                :showDataLabels="false"
                 :arrCases="arrCases"
                 :arrActiveCases="arrActiveCases"
                 :arrDeaths="arrDeaths"
-                :arrRecovers="arrRecovers"></lineChart>
+                :arrRecovers="arrRecovers"
+                :showXyTitles="true"
+                :showLegendCases="true"
+                :showLegendActiveCases="true"
+                :showLegendRecovers="true"
+                :showLegendDeaths="true"
+        ></lineChart>
 
         <v-row class="text-center">
             <v-col cols="6" lg="3" sm="6">
                 <cardStates :color="'blue-grey darken-1'" :label="'الحالات المؤكدة'" :diff="diff['Cases/الحالات']" :last="last['Cases/الحالات']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
-                <cardStates :color="'yellow darken-3'" :label="'الحالات النشيطة'" :diff="diff['active']" :last="last['active']"></cardStates>
+                <cardStates :percentage="percentageActive" :color="'yellow darken-3'" :label="'الحالات النشيطة'" :diff="diff['active']" :last="last['active']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
-                <cardStates :color="'red lighten-1'" :label="'الوفيات'" :diff="diff['Deaths/الوفيات']" :last="last['Deaths/الوفيات']"></cardStates>
+                <cardStates :percentage="percentageDeaths" :color="'red lighten-1'" :label="'الوفيات'" :diff="diff['Deaths/الوفيات']" :last="last['Deaths/الوفيات']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
-                <cardStates :color="'green lighten-2'" :label="'المتعافون'" :diff="diff['Recovered/تعافى']" :last="last['Recovered/تعافى']"></cardStates>
+                <cardStates :percentage="percentageRecovers" :color="'green lighten-2'" :label="'المتعافون'" :diff="diff['Recovered/تعافى']" :last="last['Recovered/تعافى']"></cardStates>
             </v-col>
         </v-row>
-        <lineChart
-                :arrDailyCases="arrDailyCases"
-                :arrDailyActiveCases="arrDailyActiveCases"
-        ></lineChart>
+        <v-row class="text-center">
+            <v-col cols="12" lg="3" sm="6">
+                <lineChart
+                        :arrDailyCases="arrDailyCases"
+                        :showLegendDailyCases="true"
+                ></lineChart>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+                <lineChart
+                        :arrDailyActiveCases="arrDailyActiveCases"
+                        :showLegendDailyActiveCases="true"
+                ></lineChart>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+                <lineChart
+                        :arrDailyRecovers="arrDailyRecovers"
+                        :showLegendDailyRecovers="true"
+                ></lineChart>
+            </v-col>
+            <v-col cols="12" lg="3" sm="6">
+                <lineChart
+                        :arrDailyDeaths="arrDailyDeaths"
+                        :showLegendDailyDeaths="true"
+                ></lineChart>
+            </v-col>
+        </v-row>
 
         <regions></regions>
 
@@ -56,6 +85,9 @@
             arrRecovers: [],
             last: [],
             diff: [],
+            percentageActive: '',
+            percentageDeaths: '',
+            percentageRecovers: '',
         }),
 
         mounted() {
@@ -88,6 +120,11 @@
                         }
 
                         this.last = jsonResult[jsonResult.length - 1];
+
+                        this.percentageActive = parseInt(this.last['active'])/parseInt(this.last['Cases/الحالات']);
+                        this.percentageRecovers = this.last['Recovered/تعافى']/this.last['Cases/الحالات'];
+                        this.percentageDeaths = this.last['Deaths/الوفيات']/this.last['Cases/الحالات'];
+
                         this.last['active'] = this.last['Cases/الحالات'] - this.last['Recovered/تعافى'] - this.last['Deaths/الوفيات'];
 
                         var beforeLast = jsonResult[jsonResult.length - 2];
@@ -97,6 +134,10 @@
                         this.diff['Cases/الحالات'] = this.last['Cases/الحالات'] - beforeLast['Cases/الحالات'];
                         this.diff['Recovered/تعافى'] = this.last['Recovered/تعافى'] - beforeLast['Recovered/تعافى'];
                         this.diff['Deaths/الوفيات'] = this.last['Deaths/الوفيات'] - beforeLast['Deaths/الوفيات'];
+
+                        this.percentageActive = (this.last['active']/this.last['Cases/الحالات']*100).toFixed(2);
+                        this.percentageRecovers = (this.last['Recovered/تعافى']/this.last['Cases/الحالات']*100).toFixed(2);
+                        this.percentageDeaths = (this.last['Deaths/الوفيات']/this.last['Cases/الحالات']*100).toFixed(2);
 
                         const vm = this;
 
@@ -127,10 +168,6 @@
                             vm.arrDeaths.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Deaths/الوفيات'])]);
                             vm.arrRecovers.push([vm.reformatDate(e['Dates/التواريخ']),parseInt(e['Recovered/تعافى'])]);
                         });
-
-                        console.log(vm.arrDailyCases);
-                        console.log(vm.arrCases);
-
                     });
                 });
             }
