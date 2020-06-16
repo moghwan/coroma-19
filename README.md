@@ -1,6 +1,5 @@
-# [coroma-19](https://coroma-19.netlify.com)
+# [coroma-19](https://corona.moghwan.me)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/db7c5a89-720e-444f-a445-d00762660849/deploy-status)](https://app.netlify.com/sites/coroma-19/deploys)
 [![GitHub issues](https://img.shields.io/github/issues/moghwan/coroma-19)](https://github.com/moghwan/coroma-19/issues)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![GitHub forks](https://img.shields.io/github/forks/moghwan/coroma-19)](https://github.com/moghwan/coroma-19/network)

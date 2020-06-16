@@ -13,6 +13,7 @@
                 :showLegendActiveCases="true"
                 :showLegendRecovers="true"
                 :showLegendDeaths="true"
+                :type="'area'"
         ></lineChart>
 
         <v-row class="text-center">
@@ -30,28 +31,36 @@
             </v-col>
         </v-row>
         <v-row class="text-center">
-            <v-col cols="12" lg="3" sm="6">
+            <v-col cols="12" lg="6" sm="6">
                 <lineChart
                         :arrDailyCases="arrDailyCases"
                         :showLegendDailyCases="true"
+                        :height="height"
+                        :type="'column'"
                 ></lineChart>
             </v-col>
-            <v-col cols="12" lg="3" sm="6">
+            <v-col cols="12" lg="6" sm="6">
                 <lineChart
                         :arrDailyActiveCases="arrDailyActiveCases"
                         :showLegendDailyActiveCases="true"
+                        :height="height"
+                        :type="'column'"
                 ></lineChart>
             </v-col>
-            <v-col cols="12" lg="3" sm="6">
+            <v-col cols="12" lg="6" sm="6">
                 <lineChart
                         :arrDailyRecovers="arrDailyRecovers"
                         :showLegendDailyRecovers="true"
+                        :height="height"
+                        :type="'column'"
                 ></lineChart>
             </v-col>
-            <v-col cols="12" lg="3" sm="6">
+            <v-col cols="12" lg="6" sm="6">
                 <lineChart
                         :arrDailyDeaths="arrDailyDeaths"
                         :showLegendDailyDeaths="true"
+                        :height="height"
+                        :type="'column'"
                 ></lineChart>
             </v-col>
         </v-row>
@@ -75,6 +84,8 @@
             regions,
         },
         data: () => ({
+            height: 240,
+            type: '',
             arrDailyCases: [],
             arrDailyActiveCases: [],
             arrDailyDeaths: [],
@@ -135,9 +146,9 @@
                         this.diff['Recovered/تعافى'] = this.last['Recovered/تعافى'] - beforeLast['Recovered/تعافى'];
                         this.diff['Deaths/الوفيات'] = this.last['Deaths/الوفيات'] - beforeLast['Deaths/الوفيات'];
 
-                        this.percentageActive = (this.last['active']/this.last['Cases/الحالات']*100).toFixed(2);
-                        this.percentageRecovers = (this.last['Recovered/تعافى']/this.last['Cases/الحالات']*100).toFixed(2);
-                        this.percentageDeaths = (this.last['Deaths/الوفيات']/this.last['Cases/الحالات']*100).toFixed(2);
+                        this.percentageActive = (this.last['active']/this.last['Cases/الحالات']*100).toFixed(1);
+                        this.percentageRecovers = (this.last['Recovered/تعافى']/this.last['Cases/الحالات']*100).toFixed(1);
+                        this.percentageDeaths = (this.last['Deaths/الوفيات']/this.last['Cases/الحالات']*100).toFixed(1);
 
                         const vm = this;
 

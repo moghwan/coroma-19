@@ -5,12 +5,17 @@
             flat
             hide-on-scroll
     >
+        <v-btn icon/>
+        <v-btn icon/>
         <v-spacer></v-spacer>
         <v-toolbar-title>CORO<span class="ma">🇲🇦</span>-19</v-toolbar-title>
+        <v-spacer></v-spacer>
         <v-btn icon @click="switchDarkMode">
             <v-icon>mdi-invert-colors</v-icon>
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-btn icon href="https://github.com/moghwan/coroma-19">
+            <v-icon>mdi-source-fork</v-icon>
+        </v-btn>
     </v-app-bar>
 </template>
 

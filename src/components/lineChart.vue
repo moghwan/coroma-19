@@ -22,6 +22,8 @@
             'showLegendActiveCases',
             'showLegendRecovers',
             'showLegendDeaths',
+            'height',
+            'type'
         ],
         data: () =>({
             highcharts: Chart,
@@ -34,8 +36,9 @@
             getvals(){
                 this.opt = {
                     chart: {
-                        type: 'area',
+                        type: this.type,
                         backgroundColor: (this.$vuetify.theme.dark) && '#121212',
+                        height: (this.height),
                     },
                     title: {
                         text: ' '
