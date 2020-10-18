@@ -21,13 +21,13 @@
                 <cardStates :color="'blue-grey darken-1'" :label="'الحالات المؤكدة'" :diff="diff['Cases/الحالات']" :last="last['Cases/الحالات']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
+                <cardStates :percentage="percentageRecovers" :color="'green lighten-2'" :label="'المتعافون'" :diff="diff['Recovered/تعافى']" :last="last['Recovered/تعافى']"></cardStates>
+            </v-col>
+            <v-col cols="6" lg="3" sm="6">
                 <cardStates :percentage="percentageActive" :color="'yellow darken-3'" :label="'الحالات النشيطة'" :diff="diff['active']" :last="last['active']"></cardStates>
             </v-col>
             <v-col cols="6" lg="3" sm="6">
                 <cardStates :percentage="percentageDeaths" :color="'red lighten-1'" :label="'الوفيات'" :diff="diff['Deaths/الوفيات']" :last="last['Deaths/الوفيات']"></cardStates>
-            </v-col>
-            <v-col cols="6" lg="3" sm="6">
-                <cardStates :percentage="percentageRecovers" :color="'green lighten-2'" :label="'المتعافون'" :diff="diff['Recovered/تعافى']" :last="last['Recovered/تعافى']"></cardStates>
             </v-col>
         </v-row>
         <v-row class="text-center">
