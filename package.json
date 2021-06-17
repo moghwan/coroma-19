@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "highcharts": "^9.1.0",
-    "core-js": "^3.10.0",
+    "core-js": "^3.13.0",
     "highcharts-vue": "^1.4.0",
     "node-forge": "^0.10.0",
     "register-service-worker": "^1.7.2",
